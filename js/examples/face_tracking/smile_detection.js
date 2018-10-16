@@ -84,11 +84,13 @@ var face;
 	// brfv4Example.dom.updateCodeSnippet(exampleCode + "");
 })();
 
+var canvas;
 var status = false;
 var dom = false;
 var value = 0;
 var textDiv;
-var txt;
+var word;
+var count = 1;
 var input;
 var overlay = document. getElementById("overlay");
 
@@ -111,34 +113,49 @@ $(document).on('change keydown keypress input', 'div[data-placeholder]', functio
 
 $("#box").bind("input", function (event) {
   let content = $('#box').text().length;
-	console.log(content);
+	// console.log(content);
 
   if (content > 1) {
-    $('#button').prop('disabled', false);
+    $('#enter').prop('disabled', false);
   }else {
-    $('#button').prop('disabled', true);
+    $('#enter').prop('disabled', true);
   }
 });
 
-$('#button').click(function() {
+$('#enter').click(function(e) {
+	e.preventDefault();
 	console.log("clicked");
 	let content = $('#box').text()
-	txt.textContent = content;
+	word.textContent = content;
+});
+
+$('#shuffle').click(function(e) {
+	e.preventDefault();
+	console.log("shuffle");
+  var id = word.id;
+
+	if (id == "txt1") {
+		word.id = 'txt2';
+		count = 2;
+	} else if (id = 'txt2') {
+		word.id = 'txt1';
+		count = 1;
+	} else {}
 });
 
 	function setup() {
 		// canvas
 		console.log("hola from p5");
-	  canvas = createCanvas(1280,720);
+	  canvas = createCanvas(window.innerWidth,window.innerHeight);
 
 		// parametric word
 		textDiv = document.createElement("div");
 		textDiv.setAttribute('id', 'textDiv');
 
-		txt = document.createElement("p");
-		txt.textContent += "hello";
-		txt.setAttribute('id', 'txt');
-  	textDiv.appendChild(txt);
+		word = document.createElement("p");
+		word.textContent += "hello";
+		word.setAttribute('id', 'txt1');
+  	textDiv.appendChild(word);
 
   	document.body.appendChild(textDiv);
 
@@ -153,11 +170,15 @@ $('#button').click(function() {
 
 		if (smileFactor) {
 			value = (smileFactor * 100).toFixed(0);
-			let n1 = map(value,0,100,0,190);
-			//console.log(n);
-			txt.setAttribute("style","font-variation-settings: 'wght' " + n1);
-			var css = $("#txt").css("font-variation-settings")
-			// console.log(css);
+
+			if (count == 1) {
+				let n = map(value,0,100,0,190);
+				word.setAttribute("style","font-variation-settings: 'wght' " + n);
+			} else if  (count == 2) {
+				let n1 = map(value,0,100,2,100);
+				let n2 = map(value,0,100,0,100);
+				word.setAttribute("style","font-variation-settings: 'wght' " + n1 + ", 'wdth' " + n2);
+			} else {}
 		}
 
 		//reorganize list into dictionary with point objects
@@ -227,3 +248,13 @@ $('#button').click(function() {
 
 		requestAnimationFrame(animate);
 	}
+
+	function resize() {
+		var cv = document. getElementById("defaultCanvas0");
+		cv.width = window.innerWidth;
+		cv.height = window.innerHeight;
+		cv.setAttribute("width", window.innerWidth);
+		cv.setAttribute("height", window.innerHeight);
+	}
+
+window.addEventListener('resize', resize, false);
