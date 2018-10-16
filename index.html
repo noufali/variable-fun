@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+	<meta charset="utf-8">
+
+	<link rel="stylesheet" type="text/css" href="css/brfv4_examples_theme.css">
+	<title>ADP SMILE!</title>
+
+	<!--<script src="js/libs/createjs/preloadjs-0.6.2.min.js"></script>-->
+	<script src="js/libs/createjs/preloadjs.min.js"></script>
+
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-5620419-18"></script>
+	<script src="https://cdn.jsdelivr.net/npm/opentype.js@latest/dist/opentype.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.7.1/p5.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.7.1/addons/p5.dom.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag(){dataLayer.push(arguments);}
+		gtag('js', new Date());
+		gtag('config', 'UA-5620419-18');
+	</script>
+
+</head>
+
+<body>
+
+<div id="_wrapper">
+	<div id="_content">
+		<video  id="_webcam" playsinline></video>
+		<canvas id="_imageData"></canvas>
+		<canvas id="_faceSub"></canvas>
+		<canvas id="_t3d"></canvas>
+		<canvas id="_f3d"></canvas>
+		<canvas id="_drawing"></canvas>
+		<div id="overlay"></div>
+		<div id="random"></div>
+		<div id="_stats"></div>
+		<div id="_progressBar"></div>
+	</div>
+
+	<div id="_subline"></div>
+	<div id="_highlight"><pre><code class="javascript" id="_gist"></code></pre></div>
+</div>
+
+<div id="_settingsRight"></div>
+
+<div id="options">
+		<div id="bubble">
+			<div id="box" contenteditable="true" spellcheck="true" role="textbox" aria-multiline="true" data-placeholder="Enter Word.." dir="ltr" aria-autocomplete="list" aria-expanded="false" aria-owns="typeahead-dropdown-4">
+			</div>
+			<input id="button" type="submit" value="submit" disabled="true"</input>
+		</div>
+	</div>
+
+</body>
+<script src="js/BRFv4Demo.js"></script>
+
+<script>
+	window.onload = brfv4Example.start; //see js/BRFv4Demo.js
+</script>
+</html>
