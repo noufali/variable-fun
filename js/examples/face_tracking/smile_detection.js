@@ -155,7 +155,7 @@ function setup() {
 	animate();
 	status = false;
 }
-
+var strokeValue = 3;
 function animate() {
   background('rgb(48,66,154)');
 
@@ -172,6 +172,7 @@ function animate() {
 			let n2 = map(value,0,100,0,100);
 			word.setAttribute("style","font-variation-settings: 'wght' " + n1 + ", 'wdth' " + n2);
 		} else {}
+		strokeValue = map(value,0,100,3,15);
 	}
 
 	// reorganize face point list into dictionary with point objects
@@ -192,7 +193,7 @@ function animate() {
 		// drawing face
 		push();
 		stroke('#EB5D4A');
-		strokeWeight(3);
+		strokeWeight(strokeValue);
 		noFill();
 
 		// EDGES OF FACE
