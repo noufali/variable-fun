@@ -76,7 +76,7 @@ video 			{ position: absolute; background-color: transparent; display: none;  ma
   position: absolute;
   z-index: 9999;
   margin-top: 50px;
-  margin-left: 58px;
+  margin-left: 50px;
   color:pink;
   /* background-color: black; */
 }
