@@ -64,9 +64,6 @@ var face;
 				draw.drawTriangles(	face.vertices, face.triangles, false, 1.0, color, 0.4);
 				draw.drawVertices(	face.vertices, 2.0, false, color, 0.4);
 
-				// brfv4Example.dom.updateHeadline("BRFv4 - intermediate - face tracking - simple " +
-				// 	"smile detection.\nDetects how much someone is smiling. smile factor: " +
-				// 	(smileFactor * 100).toFixed(0) + "%");
 				brfv4Example.dom.updateHeadline((smileFactor * 100).toFixed(0) + "%");
 			}
 		}
@@ -77,11 +74,6 @@ var face;
 
 	var setPoint		= brfv4.BRFv4PointUtils.setPoint;
 	var calcDistance	= brfv4.BRFv4PointUtils.calcDistance;
-
-	// brfv4Example.dom.updateHeadline("BRFv4 - intermediate - face tracking - simple smile " +
-	// 	"detection.\nDetects how much someone is smiling.");
-	//
-	// brfv4Example.dom.updateCodeSnippet(exampleCode + "");
 })();
 
 var canvas;
@@ -103,6 +95,7 @@ $.getScript("js/shaders/p5.js", function(data, textStatus, jqxhr) {
 	status = true
 });
 
+// checking for input in div
 $(document).on('change keydown keypress input', 'div[data-placeholder]', function() {
   if (this.textContent) {
     this.dataset.divPlaceholderContent = 'true';
@@ -111,9 +104,9 @@ $(document).on('change keydown keypress input', 'div[data-placeholder]', functio
   }
 });
 
+// enabling submit button once users enters more than one letter
 $("#box").bind("input", function (event) {
   let content = $('#box').text().length;
-	// console.log(content);
 
   if (content > 1) {
     $('#enter').prop('disabled', false);
@@ -122,16 +115,16 @@ $("#box").bind("input", function (event) {
   }
 });
 
+// changing word displayed on page once user hits submit
 $('#enter').click(function(e) {
 	e.preventDefault();
-	console.log("clicked");
 	let content = $('#box').text()
 	word.textContent = content;
 });
 
+// shuffle button to toggle font
 $('#shuffle').click(function(e) {
 	e.preventDefault();
-	console.log("shuffle");
   var id = word.id;
 
 	if (id == "txt1") {
@@ -143,118 +136,120 @@ $('#shuffle').click(function(e) {
 	} else {}
 });
 
-	function setup() {
-		// canvas
-		console.log("hola from p5");
-	  canvas = createCanvas(window.innerWidth,window.innerHeight);
+//setting up p5 canvas
+function setup() {
+	// canvas
+  canvas = createCanvas(window.innerWidth,window.innerHeight);
 
-		// parametric word
-		textDiv = document.createElement("div");
-		textDiv.setAttribute('id', 'textDiv');
+	// parametric word displayed on screen
+	textDiv = document.createElement("div");
+	textDiv.setAttribute('id', 'textDiv');
 
-		word = document.createElement("p");
-		word.textContent += "hello";
-		word.setAttribute('id', 'txt1');
-  	textDiv.appendChild(word);
+	word = document.createElement("p");
+	word.textContent = "hello";
+	word.setAttribute('id', 'txt1');
+	textDiv.appendChild(word);
 
-  	document.body.appendChild(textDiv);
+	document.body.appendChild(textDiv);
 
-		animate();
-		status = false;
+	animate();
+	status = false;
+}
+
+function animate() {
+  background('rgb(48,66,154)');
+
+	var face_Pts = [];
+
+	// if user smiles, then change variable axes of font based on how much user is smiling
+	if (smileFactor) {
+		value = (smileFactor * 100).toFixed(0);
+		if (count == 1) {
+			let n = map(value,0,100,0,190);
+			word.setAttribute("style","font-variation-settings: 'wght' " + n);
+		} else if  (count == 2) {
+			let n1 = map(value,0,100,2,100);
+			let n2 = map(value,0,100,0,100);
+			word.setAttribute("style","font-variation-settings: 'wght' " + n1 + ", 'wdth' " + n2);
+		} else {}
 	}
 
-	function animate() {
-	  background('rgb(48,66,154)');
-
-		var face_Pts = [];
-
-		if (smileFactor) {
-			value = (smileFactor * 100).toFixed(0);
-
-			if (count == 1) {
-				let n = map(value,0,100,0,190);
-				word.setAttribute("style","font-variation-settings: 'wght' " + n);
-			} else if  (count == 2) {
-				let n1 = map(value,0,100,2,100);
-				let n2 = map(value,0,100,0,100);
-				word.setAttribute("style","font-variation-settings: 'wght' " + n1 + ", 'wdth' " + n2);
-			} else {}
+	// reorganize face point list into dictionary with point objects
+	if (face) {
+		for(let i=0;i<face.vertices.length-2;i+=2) {
+			var point = {};
+			point['x'] = face.vertices[i];
+			point['y'] = face.vertices[i+1];
+			face_Pts.push(point);
+		}
+		// drawing circles at face points
+		noStroke();
+		fill('#EB5D4A');
+		for(let j=0;j<face_Pts.length;j++){
+			ellipse(face_Pts[j].x, face_Pts[j].y, 8);
 		}
 
-		//reorganize list into dictionary with point objects
-		if (face) {
-			for(let i=0;i<face.vertices.length-2;i+=2) {
-				var point = {};
-				point['x'] = face.vertices[i];
-				point['y'] = face.vertices[i+1];
-				face_Pts.push(point);
-			}
+		// drawing face
+		push();
+		stroke('#EB5D4A');
+		strokeWeight(3);
+		noFill();
 
-			noStroke();
-			fill('#EB5D4A');
-			for(let j=0;j<face_Pts.length;j++){
-				ellipse(face_Pts[j].x, face_Pts[j].y, 8);
-			}
-			//console.log(face_Pts);
+		// EDGES OF FACE
 
-			push();
-			stroke('#EB5D4A');
-			strokeWeight(3);
-			noFill();
+		line(face_Pts[0].x,face_Pts[0].y,face_Pts[4].x,face_Pts[4].y);
+		line(face_Pts[5].x,face_Pts[5].y,face_Pts[8].x,face_Pts[8].y);
+		line(face_Pts[8].x,face_Pts[8].y,face_Pts[11].x,face_Pts[11].y);
+		line(face_Pts[12].x,face_Pts[12].y,face_Pts[16].x,face_Pts[16].y);
 
-			// EDGES OF FACE
+		// EYEBROWS
 
-			line(face_Pts[0].x,face_Pts[0].y,face_Pts[4].x,face_Pts[4].y);
-			line(face_Pts[5].x,face_Pts[5].y,face_Pts[8].x,face_Pts[8].y);
-			line(face_Pts[8].x,face_Pts[8].y,face_Pts[11].x,face_Pts[11].y);
-			line(face_Pts[12].x,face_Pts[12].y,face_Pts[16].x,face_Pts[16].y);
+		line(face_Pts[0].x,face_Pts[0].y,face_Pts[18].x,face_Pts[18].y);
+		line(face_Pts[19].x,face_Pts[19].y,face_Pts[21].x,face_Pts[21].y);
+		line(face_Pts[22].x,face_Pts[22].y,face_Pts[24].x,face_Pts[24].y);
+		line(face_Pts[16].x,face_Pts[16].y,face_Pts[25].x,face_Pts[25].y);
 
-			// EYEBROWS
+		// NOSE
 
-			line(face_Pts[0].x,face_Pts[0].y,face_Pts[18].x,face_Pts[18].y);
-			line(face_Pts[19].x,face_Pts[19].y,face_Pts[21].x,face_Pts[21].y);
-			line(face_Pts[22].x,face_Pts[22].y,face_Pts[24].x,face_Pts[24].y);
-			line(face_Pts[16].x,face_Pts[16].y,face_Pts[25].x,face_Pts[25].y);
+		line(face_Pts[27].x,face_Pts[27].y,face_Pts[30].x,face_Pts[30].y);
+		line(face_Pts[31].x,face_Pts[31].y,face_Pts[33].x,face_Pts[33].y);
+		line(face_Pts[33].x,face_Pts[33].y,face_Pts[35].x,face_Pts[35].y);
 
-			// NOSE
+		// LEFT EYE
 
-			line(face_Pts[27].x,face_Pts[27].y,face_Pts[30].x,face_Pts[30].y);
-			line(face_Pts[31].x,face_Pts[31].y,face_Pts[33].x,face_Pts[33].y);
-			line(face_Pts[33].x,face_Pts[33].y,face_Pts[35].x,face_Pts[35].y);
+		curve(face_Pts[36].x,face_Pts[36].y,face_Pts[37].x,face_Pts[37].y,face_Pts[38].x,face_Pts[38].y,face_Pts[39].x,face_Pts[39].y,face_Pts[40].x,face_Pts[40].y,face_Pts[41].x,face_Pts[41].y);
 
-			// LEFT EYE
+		// RIGHT EYE
 
-			curve(face_Pts[36].x,face_Pts[36].y,face_Pts[37].x,face_Pts[37].y,face_Pts[38].x,face_Pts[38].y,face_Pts[39].x,face_Pts[39].y,face_Pts[40].x,face_Pts[40].y,face_Pts[41].x,face_Pts[41].y);
+		curve(face_Pts[42].x,face_Pts[42].y,face_Pts[43].x,face_Pts[43].y,face_Pts[44].x,face_Pts[44].y,face_Pts[45].x,face_Pts[45].y,face_Pts[46].x,face_Pts[46].y,face_Pts[47].x,face_Pts[47].y);
 
-			// RIGHT EYE
+		// MOUTH
 
-			curve(face_Pts[42].x,face_Pts[42].y,face_Pts[43].x,face_Pts[43].y,face_Pts[44].x,face_Pts[44].y,face_Pts[45].x,face_Pts[45].y,face_Pts[46].x,face_Pts[46].y,face_Pts[47].x,face_Pts[47].y);
+		line(face_Pts[48].x,face_Pts[48].y,face_Pts[50].x,face_Pts[50].y);
+		line(face_Pts[51].x,face_Pts[51].y,face_Pts[52].x,face_Pts[52].y);
+		line(face_Pts[50].x,face_Pts[50].y,face_Pts[51].x,face_Pts[51].y);
+		line(face_Pts[52].x,face_Pts[52].y,face_Pts[54].x,face_Pts[54].y);
+		line(face_Pts[54].x,face_Pts[54].y,face_Pts[57].x,face_Pts[57].y);
+		line(face_Pts[57].x,face_Pts[57].y,face_Pts[48].x,face_Pts[48].y);
+		line(face_Pts[48].x,face_Pts[48].y,face_Pts[62].x, face_Pts[62].y);
+		line(face_Pts[62].x,face_Pts[62].y,face_Pts[54].x, face_Pts[54].y);
+		line(face_Pts[48].x,face_Pts[48].y,face_Pts[66].x, face_Pts[66].y);
+		line(face_Pts[66].x,face_Pts[66].y,face_Pts[54].x, face_Pts[54].y);
 
-			// MOUTH
-
-			line(face_Pts[48].x,face_Pts[48].y,face_Pts[50].x,face_Pts[50].y);
-			line(face_Pts[51].x,face_Pts[51].y,face_Pts[52].x,face_Pts[52].y);
-			line(face_Pts[50].x,face_Pts[50].y,face_Pts[51].x,face_Pts[51].y);
-			line(face_Pts[52].x,face_Pts[52].y,face_Pts[54].x,face_Pts[54].y);
-			line(face_Pts[54].x,face_Pts[54].y,face_Pts[57].x,face_Pts[57].y);
-			line(face_Pts[57].x,face_Pts[57].y,face_Pts[48].x,face_Pts[48].y);
-			line(face_Pts[48].x,face_Pts[48].y,face_Pts[62].x, face_Pts[62].y);
-			line(face_Pts[62].x,face_Pts[62].y,face_Pts[54].x, face_Pts[54].y);
-			line(face_Pts[48].x,face_Pts[48].y,face_Pts[66].x, face_Pts[66].y);
-			line(face_Pts[66].x,face_Pts[66].y,face_Pts[54].x, face_Pts[54].y);
-
-			pop();
-		}
-
-		requestAnimationFrame(animate);
+		pop();
 	}
 
-	function resize() {
-		var cv = document. getElementById("defaultCanvas0");
-		cv.width = window.innerWidth;
-		cv.height = window.innerHeight;
-		cv.setAttribute("width", window.innerWidth);
-		cv.setAttribute("height", window.innerHeight);
-	}
+	requestAnimationFrame(animate);
+}
+
+// resizing canvas based on window dimensions
+
+function resize() {
+	var cv = document. getElementById("defaultCanvas0");
+	cv.width = window.innerWidth;
+	cv.height = window.innerHeight;
+	cv.setAttribute("width", window.innerWidth);
+	cv.setAttribute("height", window.innerHeight);
+}
 
 window.addEventListener('resize', resize, false);

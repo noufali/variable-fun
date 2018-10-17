@@ -79,22 +79,13 @@ brfv4Example.start = function() {
 
 		"js/libs/createjs/easeljs.min.js",						// canvas drawing lib
 		"js/libs/threejs/three.min.js",							// ThreeJS: a 3D engine
-		'js/shaders/BadTVShader.js',
-    'js/shaders/EffectComposer.js',
-    'js/shaders/RenderPass.js',
-    'js/shaders/ShaderPass.js',
-    'js/shaders/MaskPass.js',
-    'js/shaders/CopyShader.js',
-    'js/shaders/FilmShader.js',
-    'js/shaders/RGBShiftShader.js',
-    'js/shaders/StaticShader.js',
 		'js/shaders/dat.gui.min.js',
 		"js/shaders/two.js",
 		"js/shaders/p5.js",
 		"js/shaders/p5.dom.js",
 
 		"js/utils/BRFv4DOMUtils.js",							// DOM handling
-		"js/utils/BRFv4Stats.js",								// FPS meter
+		// "js/utils/BRFv4Stats.js",								// FPS meter
 
 		"js/utils/BRFv4DrawingUtils_CreateJS.js",				// BRF result drawing
 		"js/utils/BRFv4Drawing3DUtils_ThreeJS.js",				// ThreeJS 3d object placement.
