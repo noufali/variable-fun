@@ -16,7 +16,7 @@
     src: url('variable/Taub_Kerning.ttf') format('truetype');
 }
 
-html, body 	{ position: absolute; width:  100%; height:  100%; background-color: #ffffff; margin: 0; padding: 0; overflow: none; }
+html, body 	{ position: absolute; width:  100%; height:  100%; background-color: rgb(48,66,154); margin: 0; padding: 0; overflow: none; }
 canvas 			{ position: absolute; background-color: transparent; display: block; margin: 0; padding: 0; }
 video 			{ position: absolute; background-color: transparent; display: none;  margin: 0; padding: 0; width:800px}
 
@@ -90,6 +90,7 @@ video 			{ position: absolute; background-color: transparent; display: none;  ma
 	flex-wrap: nowrap;
 	margin-top: 15px;
 }
+
 #box {
   /* background-color: #EB5D4A; */
   width: 80%;

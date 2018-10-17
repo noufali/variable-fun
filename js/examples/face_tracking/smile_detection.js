@@ -246,10 +246,11 @@ function animate() {
 
 function resize() {
 	var cv = document. getElementById("defaultCanvas0");
-	cv.width = window.innerWidth;
-	cv.height = window.innerHeight;
-	cv.setAttribute("width", window.innerWidth);
-	cv.setAttribute("height", window.innerHeight);
+	// cv.width = '10vw';
+	// cv.height = '10vw';
+	//cv.setAttribute("width", '20vw');
+	//cv.setAttribute("height", '20vw');
+	//console.log(cv);
 }
 
 window.addEventListener('resize', resize, false);
