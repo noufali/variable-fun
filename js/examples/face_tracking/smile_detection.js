@@ -172,7 +172,7 @@ function animate() {
 			let n2 = map(value,0,100,0,100);
 			word.setAttribute("style","font-variation-settings: 'wght' " + n1 + ", 'wdth' " + n2);
 		} else {}
-		strokeValue = map(value,0,100,3,15);
+		strokeValue = map(value,0,100,3,9);
 	}
 
 	// reorganize face point list into dictionary with point objects
